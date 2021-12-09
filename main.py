@@ -98,9 +98,6 @@ def go(config: DictConfig):
                 json.dump(
                     dict(config["modeling"]["random_forest"].items()), fp)
 
-            # NOTE: use the rf_config we just created as the rf_config parameter for the train_random_forest
-            # step
-
             ##################
             # Implement here #
             ##################
@@ -120,11 +117,14 @@ def go(config: DictConfig):
 
         if "test_regression_model" in active_steps:
 
-            ##################
-            # Implement here #
-            ##################
-
-            pass
+            mlflow.run(
+                f"{config['main']['components_repository']}/test_regression_model",
+                "main",
+                parameters={
+                    "mlflow_model": "random_forest_model:prod",
+                    "test_dataset": "test_data.csv:latest",
+                },
+            )
 
 
 if __name__ == "__main__":
