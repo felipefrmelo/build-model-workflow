@@ -38,7 +38,10 @@ def go(args):
 
     logger.info("Cleaning data")
 
-    idx = df['price'].between(args.min_price, args.max_price)
+    range_prices = df['price'].between(args.min_price, args.max_price)
+    range_lng = df['longitude'].between(-74.25, -73.50)
+    range_lat = df['latitude'].between(40.5, 41.2)
+    idx = range_prices & range_lng & range_lat
     df = df[idx].copy()
 
     df['last_review'] = pd.to_datetime(df['last_review'])
